@@ -1,5 +1,7 @@
 import {getRandomNumber} from './common-functions.js'
 
+//======================================================================================================================
+
 class Card {
     constructor(type, y, x, subtype = null, subsubtype = null) {
         this.type = type
@@ -30,7 +32,6 @@ export class PotionCard extends Card {
             this.hp = 5
         else if (this.subtype === 'big')
             this.hp = 10
-        this.power = 0;
     }
 }
 
@@ -149,3 +150,284 @@ export class NothingCard extends Card {
         super('nothing', ...arguments)
     }
 }
+
+//======================================================================================================================
+
+export const id = {
+    CARD_ENEMY_BEE                  : 0,
+    CARD_ENEMY_SCORPION             : 1,
+    CARD_ENEMY_HEDGEHOG             : 2,
+    CARD_ENEMY_SPIDER               : 3,
+    CARD_ENEMY_WARRIOR_1            : 4,
+    CARD_ENEMY_WARRIOR_2            : 5,
+    CARD_ENEMY_MUTANT               : 6,
+    CARD_ENEMY_GREEN_DRAGON         : 7,
+    CARD_ENEMY_BLUE_DRAGON          : 8,
+    CARD_ENEMY_RED_DRAGON           : 9,
+
+    CARD_LIGHTNING                  : 10,
+
+    CARD_POTION_SMALL               : 11,
+    CARD_POTION_BIG                 : 12,
+
+    CARD_CHEST                      : 13,
+    CARD_SHUFFLE                    : 14,
+
+    CARD_WEAPON_SWORD_NORMAL        : 15,
+    CARD_WEAPON_SWORD_POISONED      : 16,
+    CARD_WEAPON_AXE_NORMAL          : 17,
+    CARD_WEAPON_AXE_POISONED        : 18,
+    CARD_WEAPON_DAGGER_NORMAL       : 19,
+    CARD_WEAPON_DAGGER_POISONED     : 20,
+
+    CARD_BOMB_HORIZONTAL            : 21,
+    CARD_BOMB_VERTICAL              : 22,
+    CARD_BOMB_SUPER                 : 23,
+    CARD_SPIKES_SINGLE              : 24,
+    CARD_SPIKES_DOUBLE              : 25,
+    CARD_SPIKES_DOUBLE_180          : 26,
+    CARD_SPIKES_TRIPLE              : 27,
+
+    CARD_NOTHING                    : 28,
+}
+
+
+//======================================================================================================================
+
+export const initOptions = [
+    {
+        cardClass: EnemyCard,
+        subtype: 'bee'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'scorpion'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'hedgehog'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'spider'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'warrior-1'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'warrior-2'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'mutant'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'green-dragon'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'blue-dragon'
+    },
+    {
+        cardClass: EnemyCard,
+        subtype: 'red-dragon'
+    },
+    {
+        cardClass: LightningCard
+    },
+    {
+        cardClass: PotionCard,
+        subtype: 'small'
+    },
+    {
+        cardClass: PotionCard,
+        subtype: 'big'
+    },
+    {
+        cardClass: ChestCard,
+    },
+    {
+        cardClass: ShuffleCard
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'sword',
+        subsubtype: 'normal'
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'sword',
+        subsubtype: 'poisoned'
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'axe',
+        subsubtype: 'normal'
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'axe',
+        subsubtype: 'poisoned'
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'dagger',
+        subsubtype: 'normal'
+    },
+    {
+        cardClass: WeaponCard,
+        subtype: 'dagger',
+        subsubtype: 'poisoned'
+    }
+    ,
+    {
+        cardClass: BombCard,
+        subtype: 'horizontal'
+    }
+    ,
+    {
+        cardClass: BombCard,
+        subtype: 'vertical'
+    },
+    {
+        cardClass: BombCard,
+        subtype: 'super'
+    },
+    {
+        cardClass: SpikesCard,
+        subtype: 'single'
+    },
+    {
+        cardClass: SpikesCard,
+        subtype: 'double'
+    },
+    {
+        cardClass: SpikesCard,
+        subtype: 'double-180'
+    },
+    {
+        cardClass: SpikesCard,
+        subtype: 'triple'
+    },
+    {
+        cardClass: NothingCard,
+    },
+]
+
+//======================================================================================================================
+
+export const chancesLevel1 = {
+    [id.CARD_ENEMY_BEE]               : 0.13,
+    [id.CARD_ENEMY_SCORPION]          : 0.13,
+    [id.CARD_ENEMY_HEDGEHOG]          : 0.09,
+    [id.CARD_ENEMY_SPIDER]            : 0.06,
+    [id.CARD_ENEMY_WARRIOR_1]         : 0.02,
+    [id.CARD_ENEMY_WARRIOR_2]         : 0.02,
+    [id.CARD_ENEMY_MUTANT]            : 0.01,
+    [id.CARD_ENEMY_GREEN_DRAGON]      : 0.01,
+    [id.CARD_ENEMY_BLUE_DRAGON]       : 0.01,
+    [id.CARD_ENEMY_RED_DRAGON]        : 0.01,
+
+    [id.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
+    [id.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
+    [id.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
+    [id.CARD_WEAPON_SWORD_POISONED]   : 0.01,
+    [id.CARD_WEAPON_AXE_NORMAL]       : 0.06,
+    [id.CARD_WEAPON_AXE_POISONED]     : 0.01,
+
+    [id.CARD_POTION_SMALL]            : 0.06,
+    [id.CARD_POTION_BIG]              : 0.06,
+
+    [id.CARD_SPIKES_SINGLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE_180]       : 0.02,
+    [id.CARD_SPIKES_TRIPLE]           : 0.02,
+
+    [id.CARD_BOMB_HORIZONTAL]         : 0.01,
+    [id.CARD_BOMB_VERTICAL]           : 0.01,
+
+    [id.CARD_LIGHTNING]               : 0.02,
+
+    [id.CARD_SHUFFLE]                 : 0.03,
+
+    [id.CARD_CHEST]                   : 0.03,
+}
+
+export const chancesLevel2 = {
+    [id.CARD_ENEMY_BEE]               : 0.11,
+    [id.CARD_ENEMY_SCORPION]          : 0.11,
+    [id.CARD_ENEMY_HEDGEHOG]          : 0.08,
+    [id.CARD_ENEMY_SPIDER]            : 0.05,
+    [id.CARD_ENEMY_WARRIOR_1]         : 0.03,
+    [id.CARD_ENEMY_WARRIOR_2]         : 0.03,
+    [id.CARD_ENEMY_MUTANT]            : 0.02,
+    [id.CARD_ENEMY_GREEN_DRAGON]      : 0.02,
+    [id.CARD_ENEMY_BLUE_DRAGON]       : 0.02,
+    [id.CARD_ENEMY_RED_DRAGON]        : 0.02,
+
+    [id.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
+    [id.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
+    [id.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
+    [id.CARD_WEAPON_SWORD_POISONED]   : 0.01,
+    [id.CARD_WEAPON_AXE_NORMAL]       : 0.06,
+    [id.CARD_WEAPON_AXE_POISONED]     : 0.01,
+
+    [id.CARD_POTION_SMALL]            : 0.06,
+    [id.CARD_POTION_BIG]              : 0.06,
+
+    [id.CARD_SPIKES_SINGLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE_180]       : 0.02,
+    [id.CARD_SPIKES_TRIPLE]           : 0.02,
+
+    [id.CARD_BOMB_HORIZONTAL]         : 0.01,
+    [id.CARD_BOMB_VERTICAL]           : 0.01,
+
+    [id.CARD_LIGHTNING]               : 0.02,
+
+    [id.CARD_SHUFFLE]                 : 0.03,
+
+    [id.CARD_CHEST]                   : 0.03,
+}
+
+export const chancesLevel3 = {
+    [id.CARD_ENEMY_BEE]               : 0.10,
+    [id.CARD_ENEMY_SCORPION]          : 0.10,
+    [id.CARD_ENEMY_HEDGEHOG]          : 0.06,
+    [id.CARD_ENEMY_SPIDER]            : 0.05,
+    [id.CARD_ENEMY_WARRIOR_1]         : 0.02,
+    [id.CARD_ENEMY_WARRIOR_2]         : 0.04,
+    [id.CARD_ENEMY_MUTANT]            : 0.03,
+    [id.CARD_ENEMY_GREEN_DRAGON]      : 0.03,
+    [id.CARD_ENEMY_BLUE_DRAGON]       : 0.04,
+    [id.CARD_ENEMY_RED_DRAGON]        : 0.04,
+
+    [id.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
+    [id.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
+    [id.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
+    [id.CARD_WEAPON_SWORD_POISONED]   : 0.01,
+    [id.CARD_WEAPON_AXE_NORMAL]       : 0.06,
+    [id.CARD_WEAPON_AXE_POISONED]     : 0.01,
+
+    [id.CARD_POTION_SMALL]            : 0.05,
+    [id.CARD_POTION_BIG]              : 0.05,
+
+    [id.CARD_SPIKES_SINGLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE]           : 0.02,
+    [id.CARD_SPIKES_DOUBLE_180]       : 0.02,
+    [id.CARD_SPIKES_TRIPLE]           : 0.02,
+
+    [id.CARD_BOMB_HORIZONTAL]         : 0.01,
+    [id.CARD_BOMB_VERTICAL]           : 0.01,
+
+    [id.CARD_LIGHTNING]               : 0.02,
+
+    [id.CARD_SHUFFLE]                 : 0.03,
+
+    [id.CARD_CHEST]                   : 0.03,
+}
+
+//======================================================================================================================

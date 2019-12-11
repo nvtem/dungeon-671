@@ -6,7 +6,7 @@
                 v-bind="card"
                 :style="{marginRight: cardI === 4 ? '0' : null, marginBottom: rowI === 4 ? '0' : null}"
                 @click="handleClickOnCard(card)"
-            ></card>
+            />
         </div>
     </div>
 </template>
@@ -16,8 +16,7 @@
     import Card from "./Card";
 
     import {shuffleArray, getWeightedRand, getRandomNumber} from '../common-functions.js'
-    import {PlayerCard, NothingCard} from '../cards.js'
-    import {getCardVariants} from "../card_variants";
+    import * as cards from '../cards.js'
 
     export default {
         name: "Board",
@@ -30,42 +29,6 @@
 
         data() {
             return {
-                CARD_ENEMY_BEE                  : 0,
-                CARD_ENEMY_SCORPION             : 1,
-                CARD_ENEMY_HEDGEHOG             : 2,
-                CARD_ENEMY_SPIDER               : 3,
-                CARD_ENEMY_WARRIOR_1            : 4,
-                CARD_ENEMY_WARRIOR_2            : 5,
-                CARD_ENEMY_MUTANT               : 6,
-                CARD_ENEMY_GREEN_DRAGON         : 7,
-                CARD_ENEMY_BLUE_DRAGON          : 8,
-                CARD_ENEMY_RED_DRAGON           : 9,
-
-                CARD_LIGHTNING                  : 10,
-
-                CARD_POTION_SMALL               : 11,
-                CARD_POTION_BIG                 : 12,
-
-                CARD_CHEST                      : 13,
-                CARD_SHUFFLE                    : 14,
-
-                CARD_WEAPON_SWORD_NORMAL        : 15,
-                CARD_WEAPON_SWORD_POISONED      : 16,
-                CARD_WEAPON_AXE_NORMAL          : 17,
-                CARD_WEAPON_AXE_POISONED        : 18,
-                CARD_WEAPON_DAGGER_NORMAL       : 19,
-                CARD_WEAPON_DAGGER_POISONED     : 20,
-
-                CARD_BOMB_HORIZONTAL            : 21,
-                CARD_BOMB_VERTICAL              : 22,
-                CARD_BOMB_SUPER                 : 23,
-                CARD_SPIKES_SINGLE              : 24,
-                CARD_SPIKES_DOUBLE              : 25,
-                CARD_SPIKES_DOUBLE_180          : 26,
-                CARD_SPIKES_TRIPLE              : 27,
-
-                CARD_NOTHING                    : 28,
-
                 cards: [],
 
                 playerCardX: 0,
@@ -84,126 +47,25 @@
                 Vue.set(this.cards[y], x, card)
             },
 
+            createCard(y, x, initOptions) {
+                if ('subtype' in initOptions && 'subsubtype' in initOptions)
+                    return new (initOptions.cardClass)(y, x, initOptions.subtype, initOptions.subsubtype)
+                else if ('subtype' in initOptions)
+                    return new (initOptions.cardClass)(y, x, initOptions.subtype)
+                else
+                    return new (initOptions.cardClass)(y, x)
+            },
+
             createRandomCard(y, x, except = null) {
                 let score = this.$store.state.score
                 let chances
 
-                if (score >= 0 && score < 50) {
-                    chances = {
-                        [this.CARD_ENEMY_BEE]               : 0.13,
-                        [this.CARD_ENEMY_SCORPION]          : 0.13,
-                        [this.CARD_ENEMY_HEDGEHOG]          : 0.09,
-                        [this.CARD_ENEMY_SPIDER]            : 0.06,
-                        [this.CARD_ENEMY_WARRIOR_1]         : 0.02,
-                        [this.CARD_ENEMY_WARRIOR_2]         : 0.02,
-                        [this.CARD_ENEMY_MUTANT]            : 0.01,
-                        [this.CARD_ENEMY_GREEN_DRAGON]      : 0.01,
-                        [this.CARD_ENEMY_BLUE_DRAGON]       : 0.01,
-                        [this.CARD_ENEMY_RED_DRAGON]        : 0.01,
-
-                        [this.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
-                        [this.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
-                        [this.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
-                        [this.CARD_WEAPON_SWORD_POISONED]   : 0.01,
-                        [this.CARD_WEAPON_AXE_NORMAL]       : 0.06,
-                        [this.CARD_WEAPON_AXE_POISONED]     : 0.01,
-
-                        [this.CARD_POTION_SMALL]            : 0.06,
-                        [this.CARD_POTION_BIG]              : 0.06,
-
-                        [this.CARD_SPIKES_SINGLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE_180]       : 0.02,
-                        [this.CARD_SPIKES_TRIPLE]           : 0.02,
-
-                        [this.CARD_BOMB_HORIZONTAL]         : 0.01,
-                        [this.CARD_BOMB_VERTICAL]           : 0.01,
-
-                        [this.CARD_LIGHTNING]               : 0.02,
-
-                        [this.CARD_SHUFFLE]                 : 0.03,
-
-                        [this.CARD_CHEST]                   : 0.03,
-                    }
-                }
-
-                if (score >= 50 && score < 100) {
-                    chances = {
-                        [this.CARD_ENEMY_BEE]               : 0.11,
-                        [this.CARD_ENEMY_SCORPION]          : 0.11,
-                        [this.CARD_ENEMY_HEDGEHOG]          : 0.08,
-                        [this.CARD_ENEMY_SPIDER]            : 0.05,
-                        [this.CARD_ENEMY_WARRIOR_1]         : 0.03,
-                        [this.CARD_ENEMY_WARRIOR_2]         : 0.03,
-                        [this.CARD_ENEMY_MUTANT]            : 0.02,
-                        [this.CARD_ENEMY_GREEN_DRAGON]      : 0.02,
-                        [this.CARD_ENEMY_BLUE_DRAGON]       : 0.02,
-                        [this.CARD_ENEMY_RED_DRAGON]        : 0.02,
-
-                        [this.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
-                        [this.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
-                        [this.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
-                        [this.CARD_WEAPON_SWORD_POISONED]   : 0.01,
-                        [this.CARD_WEAPON_AXE_NORMAL]       : 0.06,
-                        [this.CARD_WEAPON_AXE_POISONED]     : 0.01,
-
-                        [this.CARD_POTION_SMALL]            : 0.06,
-                        [this.CARD_POTION_BIG]              : 0.06,
-
-                        [this.CARD_SPIKES_SINGLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE_180]       : 0.02,
-                        [this.CARD_SPIKES_TRIPLE]           : 0.02,
-
-                        [this.CARD_BOMB_HORIZONTAL]         : 0.01,
-                        [this.CARD_BOMB_VERTICAL]           : 0.01,
-
-                        [this.CARD_LIGHTNING]               : 0.02,
-
-                        [this.CARD_SHUFFLE]                 : 0.03,
-
-                        [this.CARD_CHEST]                   : 0.03,
-                    }
-                }
-
-                if (score >= 100) {
-                    chances = {
-                        [this.CARD_ENEMY_BEE]               : 0.10,
-                        [this.CARD_ENEMY_SCORPION]          : 0.10,
-                        [this.CARD_ENEMY_HEDGEHOG]          : 0.06,
-                        [this.CARD_ENEMY_SPIDER]            : 0.05,
-                        [this.CARD_ENEMY_WARRIOR_1]         : 0.02,
-                        [this.CARD_ENEMY_WARRIOR_2]         : 0.04,
-                        [this.CARD_ENEMY_MUTANT]            : 0.03,
-                        [this.CARD_ENEMY_GREEN_DRAGON]      : 0.03,
-                        [this.CARD_ENEMY_BLUE_DRAGON]       : 0.04,
-                        [this.CARD_ENEMY_RED_DRAGON]        : 0.04,
-
-                        [this.CARD_WEAPON_DAGGER_NORMAL]    : 0.06,
-                        [this.CARD_WEAPON_DAGGER_POISONED]  : 0.01,
-                        [this.CARD_WEAPON_SWORD_NORMAL]     : 0.06,
-                        [this.CARD_WEAPON_SWORD_POISONED]   : 0.01,
-                        [this.CARD_WEAPON_AXE_NORMAL]       : 0.06,
-                        [this.CARD_WEAPON_AXE_POISONED]     : 0.01,
-
-                        [this.CARD_POTION_SMALL]            : 0.05,
-                        [this.CARD_POTION_BIG]              : 0.05,
-
-                        [this.CARD_SPIKES_SINGLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE]           : 0.02,
-                        [this.CARD_SPIKES_DOUBLE_180]       : 0.02,
-                        [this.CARD_SPIKES_TRIPLE]           : 0.02,
-
-                        [this.CARD_BOMB_HORIZONTAL]         : 0.01,
-                        [this.CARD_BOMB_VERTICAL]           : 0.01,
-
-                        [this.CARD_LIGHTNING]               : 0.02,
-
-                        [this.CARD_SHUFFLE]                 : 0.03,
-
-                        [this.CARD_CHEST]                   : 0.03,
-                    }
-                }
+                if (score >= 0 && score < 50)
+                    chances = cards.chancesLevel1
+                else if (score >= 50 && score < 100)
+                    chances = cards.chancesLevel2
+                else if (score >= 100)
+                    chances = cards.chancesLevel3
 
                 if (except) {
                     let val = chances[except]
@@ -211,20 +73,13 @@
                     let sum = 0;
                     for (let item in chances)
                         sum += chances[item]
-                    Object.keys(chances).forEach(function(key, index) {
+                    Object.keys(chances).forEach(function(key) {
                         chances[key] += val * (chances[key]/sum)
                     })
                 }
 
                 let index = getWeightedRand(chances)
-                let cardInitOptions = getCardVariants()[index]
-
-                if ('subtype' in cardInitOptions && 'subsubtype' in cardInitOptions)
-                    return new (cardInitOptions.cardClass)(y, x, cardInitOptions.subtype, cardInitOptions.subsubtype)
-                else if ('subtype' in cardInitOptions)
-                    return new (cardInitOptions.cardClass)(y, x, cardInitOptions.subtype)
-                else
-                    return new (cardInitOptions.cardClass)(y, x)
+                return this.createCard(y, x, cards.initOptions[index])
             },
 
             attackCard(y, x, fromDirection) {
@@ -259,7 +114,7 @@
                         }
 
                         if (card.hp === 0) {
-                            this.setCard(y, x, new NothingCard(y, x))
+                            this.setCard(y, x, new cards.NothingCard(y, x))
                         } else {
                             if (this.playerCard.hasPoisonedWeapon && !card.canPoison) {
                                 card.isPoisoned = true
@@ -289,7 +144,7 @@
                     case 'shuffle':
                         ret = false
 
-                        this.setCard(y, x, new NothingCard(y, x))
+                        this.setCard(y, x, new cards.NothingCard(y, x))
 
                         let arr = []
                         for (let i = 0; i < 25; i++)
@@ -337,33 +192,24 @@
                         ret = false
 
                         let chances = {
-                            [this.CARD_WEAPON_DAGGER_NORMAL]    : 0.05,
-                            [this.CARD_WEAPON_DAGGER_POISONED]  : 0.03,
-                            [this.CARD_WEAPON_SWORD_NORMAL]     : 0.05,
-                            [this.CARD_WEAPON_SWORD_POISONED]   : 0.03,
-                            [this.CARD_WEAPON_AXE_NORMAL]       : 0.05,
-                            [this.CARD_WEAPON_AXE_POISONED]     : 0.03,
+                            [cards.id.CARD_WEAPON_DAGGER_NORMAL]    : 0.05,
+                            [cards.id.CARD_WEAPON_DAGGER_POISONED]  : 0.03,
+                            [cards.id.CARD_WEAPON_SWORD_NORMAL]     : 0.05,
+                            [cards.id.CARD_WEAPON_SWORD_POISONED]   : 0.03,
+                            [cards.id.CARD_WEAPON_AXE_NORMAL]       : 0.05,
+                            [cards.id.CARD_WEAPON_AXE_POISONED]     : 0.03,
 
-                            [this.CARD_POTION_SMALL]            : 0.125,
-                            [this.CARD_POTION_BIG]              : 0.125,
+                            [cards.id.CARD_POTION_SMALL]            : 0.125,
+                            [cards.id.CARD_POTION_BIG]              : 0.125,
 
-                            [this.CARD_LIGHTNING]               : 0.26,
+                            [cards.id.CARD_LIGHTNING]               : 0.26,
 
-                            [this.CARD_SHUFFLE]                 : 0.25,
+                            [cards.id.CARD_SHUFFLE]                 : 0.25,
                         }
 
                         let index = getWeightedRand(chances)
-
-                        let cardInitOptions = getCardVariants()[index]
-
-                        if ('subtype' in cardInitOptions && 'subsubtype' in cardInitOptions)
-                            card = new (cardInitOptions.cardClass)(y, x, cardInitOptions.subtype, cardInitOptions.subsubtype)
-                        else if ('subtype' in cardInitOptions)
-                            card = new (cardInitOptions.cardClass)(y, x, cardInitOptions.subtype)
-                        else
-                            card = new (cardInitOptions.cardClass)(y, x)
-
-                        this.setCard(y, x, card)
+                        let newCard = this.createCard(y, x, cards.initOptions[index])
+                        this.setCard(y, x, newCard)
 
                         break
 
@@ -378,7 +224,7 @@
                                 if (cardI.type === 'enemy') {
                                     cardI.hp -= card.power
                                     if (cardI.hp <= 0)
-                                        this.setCard(i, j, new NothingCard(i, j))
+                                        this.setCard(i, j, new cards.NothingCard(i, j))
                                 }
                             }
                         }
@@ -481,7 +327,7 @@
                                 if (card.type === 'player') {
 
                                 } else {
-                                    this.setCard(i, j, new NothingCard())
+                                    this.setCard(i, j, new cards.NothingCard())
                                 }
                             }
                         }
@@ -550,9 +396,9 @@
                                         if ('hp' in this.cards[i][k] && this.cards[i][k].type !== 'potion') {
                                             this.cards[i][k].hp -= power
                                             if (this.cards[i][k].hp <= 0)
-                                                this.setCard(i, k, new NothingCard(i, k))
+                                                this.setCard(i, k, new cards.NothingCard(i, k))
                                         } else {
-                                            this.setCard(i, k, new NothingCard(i, k))
+                                            this.setCard(i, k, new cards.NothingCard(i, k))
                                         }
                                     }
                                 }
@@ -562,9 +408,9 @@
                                         if ('hp' in this.cards[k][j] && this.cards[k][j].type !== 'potion') {
                                             this.cards[k][j].hp -= power
                                             if (this.cards[k][j].hp <= 0)
-                                                this.setCard(k, j, new NothingCard(k, j))
+                                                this.setCard(k, j, new cards.NothingCard(k, j))
                                         } else {
-                                            this.setCard(k, j, new NothingCard(k, j))
+                                            this.setCard(k, j, new cards.NothingCard(k, j))
                                         }
                                     }
                                 }
@@ -601,7 +447,7 @@
                 this.playerCardY = getRandomNumber(4)
                 this.playerCardX = getRandomNumber(4)
 
-                this.setCard(this.playerCardY, this.playerCardX, new PlayerCard(this.playerCardY, this.playerCardX))
+                this.setCard(this.playerCardY, this.playerCardX, new cards.PlayerCard(this.playerCardY, this.playerCardX))
             }
         },
 
